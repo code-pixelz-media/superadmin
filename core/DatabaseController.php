@@ -189,7 +189,20 @@ class DatabaseController
             $existingId = $stmt->fetchColumn();
 
             if ($existingId !== false) {
-                // Step 2: Get the total number of active sites for the license key
+                // Step 2: Check if the site_url is already active for the given license_id
+                $checkSiteSql = "SELECT status FROM {$this->siteurlTableName} WHERE license_id = :license_id AND site_url = :site_url";
+                $checkSiteStmt = $this->conn->prepare($checkSiteSql);
+                $checkSiteStmt->bindParam(':license_id', $existingId, PDO::PARAM_INT);
+                $checkSiteStmt->bindParam(':site_url', $site_url, PDO::PARAM_STR);
+                $checkSiteStmt->execute();
+                $siteStatus = $checkSiteStmt->fetchColumn();
+
+                if ($siteStatus === 'active') {
+                    // Site is already active, do not increase active_sites
+                    return true;
+                }
+
+                // Step 3: Get the total number of active sites for the license key
                 $updateActiveSitesSql = "SELECT `active_sites` FROM {$this->licenseTableName} WHERE license_key = :license_key";
                 $stmtActiveSitesSql = $this->conn->prepare($updateActiveSitesSql);
                 $stmtActiveSitesSql->bindParam(':license_key', $licenseKey, PDO::PARAM_STR);
@@ -197,7 +210,7 @@ class DatabaseController
                 $existingActiveSitesSql = $stmtActiveSitesSql->fetchColumn();
                 $totalActive_sites = $existingActiveSitesSql + 1;
 
-                // Step 3: Update active_sites count
+                // Step 4: Update active_sites count
                 $updateActiveSites = "UPDATE {$this->licenseTableName} 
                                       SET active_sites = :active_sites 
                                       WHERE license_key = :license_key";
@@ -206,16 +219,9 @@ class DatabaseController
                 $updateActiveSitesStmt->bindParam(':license_key', $licenseKey, PDO::PARAM_STR);
                 $updateActiveSitesStmt->execute();
 
-                // Step 4: Check if the license_id exists in siteurlTableName
-                $checkSiteSql = "SELECT id FROM {$this->siteurlTableName} WHERE license_id = :license_id AND site_url = :site_url";
-                $checkSiteStmt = $this->conn->prepare($checkSiteSql);
-                $checkSiteStmt->bindParam(':license_id', $existingId, PDO::PARAM_INT);
-                $checkSiteStmt->bindParam(':site_url', $site_url, PDO::PARAM_STR);
-                $checkSiteStmt->execute();
-                $siteExists = $checkSiteStmt->fetchColumn();
-
-                if ($siteExists) {
-                    // Step 5a: Update status if site_url exists for license_id
+                // Step 5: Insert or update the site_url status
+                if ($siteStatus) {
+                    // Update status if site_url exists but is not active
                     $updateSiteSql = "UPDATE {$this->siteurlTableName} 
                                       SET status = :status 
                                       WHERE license_id = :license_id AND site_url = :site_url";
@@ -226,7 +232,7 @@ class DatabaseController
                     $updateSiteStmt->bindParam(':site_url', $site_url, PDO::PARAM_STR);
                     $updateSiteStmt->execute();
                 } else {
-                    // Step 5b: Insert a new record if site_url does not exist for license_id
+                    // Insert new site_url if it does not exist
                     $insertSql = "INSERT INTO {$this->siteurlTableName} (site_url, license_id, status) 
                                   VALUES (:site_url, :license_id, :status)";
                     $insertStmt = $this->conn->prepare($insertSql);
