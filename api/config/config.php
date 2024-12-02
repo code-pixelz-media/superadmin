@@ -9,7 +9,7 @@ define('DISPLAY_ERRORS', true);
 // Database Configuration
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'license_verification');   
-define('DB_USER', 'wooescrow_superadmin');
+define('DB_USER', 'root');
 define('DB_PASS', 'root');
 
 define('JWT_SECRET_KEY', 'your-secret-key'); 
