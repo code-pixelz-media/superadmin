@@ -8,7 +8,7 @@ define('DISPLAY_ERRORS', true);
 
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'license_verification');   
+define('DB_NAME', 'wooescrow_superadmin');   
 define('DB_USER', 'wooescrow_superadmin');
 define('DB_PASS', 'root');
 
