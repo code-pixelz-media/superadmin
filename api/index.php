@@ -40,6 +40,8 @@ if (!$installer->isInstalled()) {
 
 $basePath = '/api';
 
+var_dump($basePath);
+
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $requestUri = str_replace($basePath, '', $requestUri);
 $requestUri = rtrim($requestUri, '/');
