@@ -9,9 +9,9 @@ var_dump('Hellows');
 
 // require_once __DIR__ . '/config/config.php';
 
-// require_once __DIR__ . '/models/DatabaseInstaller.php';
-// require_once __DIR__ . '/models/Database.php';
-// require_once __DIR__ . '/models/License.php';
+require_once __DIR__ . '/models/DatabaseInstaller.php';
+require_once __DIR__ . '/models/Database.php';
+require_once __DIR__ . '/models/License.php';
 // require_once __DIR__ . '/vendor/autoload.php';
 
 // require_once __DIR__ . '/helpers/JwtHelper.php';
@@ -21,24 +21,24 @@ var_dump('Hellows');
 // require_once __DIR__ . '/controllers/LicenseController.php';
 // require_once __DIR__ . '/routes/index.php';
 
-// $installer = new DatabaseInstaller();
+$installer = new DatabaseInstaller();
 
-// var_dump($installer)
+var_dump($installer);
 
-// if (!$installer->isInstalled()) {
-//     if ($installer->install()) {
-//         echo json_encode([
-//             'status' => 'success',
-//             'message' => 'Database installed successfully',
-//         ]);
-//     } else {
-//         echo json_encode([
-//             'status' => 'error',
-//             'message' => 'Database installation failed',
-//         ]);
-//         exit;
-//     }
-// } 
+if (!$installer->isInstalled()) {
+    if ($installer->install()) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Database installed successfully',
+        ]);
+    } else {
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Database installation failed',
+        ]);
+        exit;
+    }
+} 
 
 
 
