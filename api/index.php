@@ -20,6 +20,8 @@ require_once __DIR__ . '/routes/index.php';
 
 $installer = new DatabaseInstaller();
 
+var_dump($installer);
+
 if (!$installer->isInstalled()) {
     if ($installer->install()) {
         echo json_encode([
