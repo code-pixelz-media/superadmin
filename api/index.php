@@ -8,7 +8,7 @@ require_once __DIR__ . '/config/config.php';
 
 require_once __DIR__ . '/models/DatabaseInstaller.php';
 require_once __DIR__ . '/models/Database.php';
-require_once __DIR__ . '/models/license.php';
+require_once __DIR__ . '/models/License.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 require_once __DIR__ . '/helpers/JwtHelper.php';
