@@ -69,7 +69,6 @@ class LicenseController extends RestController
             
             $licenseId = $this->licenseId;
             
-            var_dump($licenseId);
             $isActivated = $this->licenseModel->activateLicense($licenseId, $domain, $deviceIdentifier);
             if ($isActivated) {
                 $this->returnResponse(200, "License activated successfully.");
@@ -84,10 +83,9 @@ class LicenseController extends RestController
     public function deactivate()
     {
         try {
-            $licenseId = $this->validateParameter("licenseId", $this->param['licenseId'], INTEGER, true);
+            $licenseId = $this->licenseId;
             $domain = $this->validateParameter("domain", $this->param['domain'], STRING, true);
             $deviceIdentifier = $this->validateParameter("deviceIdentifier", $this->param['deviceIdentifier'], STRING, true);
-
             $isDeactivated = $this->licenseModel->deactivateLicense($licenseId, $domain, $deviceIdentifier);
             if ($isDeactivated) {
                 $this->returnResponse(200, "License deactivated successfully.");
