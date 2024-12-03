@@ -44,9 +44,11 @@ require_once __DIR__ . '/config/config.php';
 
 $basePath = '/api';
 
+var_dump($_SERVER);
+
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-var_dump($requestUri);
+
 $requestUri = str_replace($basePath, '', $requestUri);
 $requestUri = rtrim($requestUri, '/');
 
