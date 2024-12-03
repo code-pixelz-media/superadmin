@@ -12,9 +12,9 @@ require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/models/DatabaseInstaller.php';
 require_once __DIR__ . '/models/Database.php';
 require_once __DIR__ . '/models/License.php';
-require_once __DIR__ . '/vendor/autoload.php';
+// require_once __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/helpers/JwtHelper.php';
+// require_once __DIR__ . '/helpers/JwtHelper.php';
 
 
 require_once __DIR__ .'/controllers/RestController.php';
@@ -42,13 +42,13 @@ if (!$installer->isInstalled()) {
 
 
 
-$basePath = '/api';
+$scriptName = dirname($_SERVER['SCRIPT_NAME']);
+$basePath = rtrim($scriptName, '/');
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 $requestUri = str_replace($basePath, '', $requestUri);
 $requestUri = rtrim($requestUri, '/');
-
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 

@@ -7,28 +7,30 @@ class RestController
     protected $param;
     protected $dbConn;
     protected $userId;
-    protected $jwt;
-    protected $allowed;
-    protected $expiredToken = false;
-    protected $valid_payload;
+
+    protected $licenseModel;
+    protected $licenseId;
+    protected $status;
+    protected $expiry;
+    protected  $max_installations;
+    protected $active_installations;
+
+
+
     public function __construct()
     {
 
         $this->initializeRequest();
-        $this->jwt = JwtHelper::getInstance();
 
         $this->validateRequest();
 
         $this->dbConn = Database::getInstance()->getConnection();
-
-        error_log('Service Name Detected: ' . $this->serviceName);
-
-        if (!in_array($this->serviceName, ['token', 'refreshtoken'])) {
-            error_log('Executing validateToken() for: ' . $this->serviceName);
-            $this->validateToken();
-        } else {
-            error_log('Skipping validateToken() for: ' . $this->serviceName);
+        $this->licenseModel = new License();
+        if(strtolower($this->serviceName) !== 'createlicense'){
+            $this->validateLicenseToken();
         }
+        
+     
     }
 
     /**
@@ -100,45 +102,22 @@ class RestController
     /**
      * Validate Bearer Token from the request
      */
-    public function validateToken()
+    public function validateLicenseToken()
     {
 
         $token = $this->getBearerToken();
-        $valid_data = $this->jwt->validate($token);
+        
+        $license_results = $this->licenseModel->getLicenseByKey($token);
 
-        if (!$valid_data['success']) {
-            $this->throwError(ACCESS_TOKEN_ERRORS, $valid_data['message']);
-        }
+        if (!$license_results)
+            $this->throwError(400, "License Key Not Found or invalid token");
 
-        $this->valid_payload = $valid_data['payload'];
-    }
-
-    public function createToken($email, $license_key)
-    {
-
-        $payload = [
-            'license_key' => $license_key,
-            'email' => $email,
-            // 'domain' => $domain,
-        ];
-        $token = $this->jwt->generateTokenPair($payload);
-        if ($token['success'] == false) {
-            $this->throwError($token['error_code'], $token['message']);
-        }
-        unset($token['success']);
-        $this->returnResponse(200, "Token generated sucessfully", $token);
-    }
-
-    public function tokenRefresh($storedRefreshToken)
-    {
-
-        $ref_token = $this->jwt->refreshAccessToken($storedRefreshToken);
-
-        if ($ref_token['error_code'] == 402) {
-            $this->throwError(402, "Signature Verification Failed");
-        }
-
-        $this->returnResponse(200, "Refresh Token generated sucessfully", $ref_token);
+        $this->licenseId =  (int) $license_results['id'];
+        $this->status = $license_results['status'];
+        $this->expiry = $license_results['expires_at'];
+        $this->max_installations = $license_results['max_installations'];
+        $this->active_installations = $license_results['active_installations'];
+        // $this->returnResponse(200, "License Key validated successfully.",$license_results);
     }
     /**
      * Process the API call
@@ -168,7 +147,7 @@ class RestController
         http_response_code($code);
 
         $error_array = [
-            'error' => [
+            'response' => [
                 'status' => $code,
                 'success' => false,
                 'message' => $message,
@@ -176,7 +155,7 @@ class RestController
         ];
 
         if (!empty($responsedata)) {
-            $error_array['response'] = $responsedata;
+            $error_array['response']['data'] = $responsedata;
         }
 
         echo json_encode($error_array, JSON_PRETTY_PRINT);

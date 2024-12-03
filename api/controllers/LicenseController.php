@@ -4,12 +4,12 @@
 
 class LicenseController extends RestController
 {
-    private $licenseModel;
+   
 
     public function __construct()
     {
         parent::__construct();
-        $this->licenseModel = new License();
+       
     }
 
     public function getAll()
@@ -25,8 +25,10 @@ class LicenseController extends RestController
     public function verify()
     {
         try {
+        
+       
             $email = $this->validateParameter("email", $this->param['email'], STRING, true);
-            $key = $this->validateParameter("key", $this->param['key'], STRING, true);
+            $key = $this->validateParameter("key", $this->getBearerToken(), STRING, true);
             $isValid = $this->licenseModel->verifyLicense($email, $key);
             
             if ($isValid) {
@@ -39,7 +41,7 @@ class LicenseController extends RestController
         }
     }
 
-    public function createLicense()
+    public function createlicense()
     {
         try {
             $userId = $this->validateParameter("userId", $this->param['userId'], INTEGER, true);
@@ -50,7 +52,7 @@ class LicenseController extends RestController
 
             $licenseKey = $this->licenseModel->generateLicense($userId, $orderId, $email, $maxInstallations, $expiresAt);
             if ($licenseKey) {
-                $this->returnResponse(200, ["licenseKey" => $licenseKey]);
+                $this->returnResponse(200, "License key generated successfully",["licenseKey" => $licenseKey]);
             } else {
                 $this->throwError(500, "Failed to generate license.");
             }
@@ -62,10 +64,12 @@ class LicenseController extends RestController
     public function activate()
     {
         try {
-            $licenseId = $this->validateParameter("licenseId", $this->param['licenseId'], INTEGER, true);
             $domain = $this->validateParameter("domain", $this->param['domain'], STRING, true);
             $deviceIdentifier = $this->validateParameter("deviceIdentifier", $this->param['deviceIdentifier'], STRING, true);
-
+            
+            $licenseId = $this->licenseId;
+            
+            var_dump($licenseId);
             $isActivated = $this->licenseModel->activateLicense($licenseId, $domain, $deviceIdentifier);
             if ($isActivated) {
                 $this->returnResponse(200, "License activated successfully.");
@@ -94,22 +98,24 @@ class LicenseController extends RestController
             $this->throwError(500, "Deactivation failed: " . $e->getMessage());
         }
     }
-
-    public function token()
-    {
-        $email = $this->validateParameter("email", $this->param['email'], STRING, true);
-        $key = $this->validateParameter("licensekey", $this->param['licensekey'], STRING, true);
-        // $domain = $this->validateParameter('domain', $this->param['domain'], STRING , true);
-        $this->createToken($email,$key);
-
-    }
     
-    public function refreshtoken(){
+    
+
+    // public function token()
+    // {
+    //     $email = $this->validateParameter("email", $this->param['email'], STRING, true);
+    //     $key = $this->validateParameter("licensekey", $this->param['licensekey'], STRING, true);
+    //     // $domain = $this->validateParameter('domain', $this->param['domain'], STRING , true);
+    //     $this->createToken($email,$key);
+
+    // }
+    
+    // public function refreshtoken(){
             
-            $oldToken = $this->validateParameter("expiredtoken" , $this->param['expiredtoken'], STRING,true);
+    //         $oldToken = $this->validateParameter("expiredtoken" , $this->param['expiredtoken'], STRING,true);
          
-            $this->tokenRefresh($oldToken);
-    }
+    //         $this->tokenRefresh($oldToken);
+    // }
 
 
 }

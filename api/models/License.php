@@ -91,7 +91,7 @@ class License {
         try {
             $stmt->execute([$licenseId, $domain, $deviceIdentifier]);
 
-            // Increment active installations count
+       
             $this->incrementActiveInstallations($licenseId);
 
             return true;
@@ -161,6 +161,18 @@ class License {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
+    public function getLicenseByKey($key){
+        $stmt = $this->db->prepare(
+            "SELECT * FROM licenses WHERE license_key = ?"
+        );
+        $stmt->execute([$key]);
+        return $stmt->fetch(PDO::FETCH_ASSOC); 
+    }
+    
+    
+    public function getLicenseByDomain($domain){
+    
+    }
     
     public function getAllLicenses(){
         $stmt = $this->db->prepare(
