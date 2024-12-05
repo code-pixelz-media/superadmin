@@ -7,3 +7,5 @@ node_modules/
 .DS_Store
 
 /api/.htaccess
+/api/config
+/api/config

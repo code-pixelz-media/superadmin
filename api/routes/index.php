@@ -34,6 +34,7 @@ class Router
 
         $requestUri = trim(parse_url($requestUri, PHP_URL_PATH), '/');
         $requestMethod = strtoupper($requestMethod);
+        
 
         foreach ($this->routes as $route) {
 

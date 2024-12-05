@@ -1,7 +1,5 @@
 <?php
-
-//
-
+// Extends Rests Controller 
 class LicenseController extends RestController
 {
    
@@ -11,6 +9,7 @@ class LicenseController extends RestController
         parent::__construct();
        
     }
+
 
     public function getAll()
     {
@@ -25,8 +24,6 @@ class LicenseController extends RestController
     public function verify()
     {
         try {
-        
-       
             $email = $this->validateParameter("email", $this->param['email'], STRING, true);
             $key = $this->validateParameter("key", $this->getBearerToken(), STRING, true);
             $isValid = $this->licenseModel->verifyLicense($email, $key);
@@ -97,23 +94,5 @@ class LicenseController extends RestController
         }
     }
     
-    
-
-    // public function token()
-    // {
-    //     $email = $this->validateParameter("email", $this->param['email'], STRING, true);
-    //     $key = $this->validateParameter("licensekey", $this->param['licensekey'], STRING, true);
-    //     // $domain = $this->validateParameter('domain', $this->param['domain'], STRING , true);
-    //     $this->createToken($email,$key);
-
-    // }
-    
-    // public function refreshtoken(){
-            
-    //         $oldToken = $this->validateParameter("expiredtoken" , $this->param['expiredtoken'], STRING,true);
-         
-    //         $this->tokenRefresh($oldToken);
-    // }
-
 
 }

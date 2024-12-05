@@ -1,5 +1,7 @@
 <?php
 
+// Handles All Responses 
+
 class RestController
 {
     protected $request;
@@ -12,9 +14,8 @@ class RestController
     protected $licenseId;
     protected $status;
     protected $expiry;
-    protected  $max_installations;
+    protected $max_installations;
     protected $active_installations;
-
 
 
     public function __construct()
@@ -25,8 +26,11 @@ class RestController
         $this->validateRequest();
 
         $this->dbConn = Database::getInstance()->getConnection();
+
         $this->licenseModel = new License();
+
         if(strtolower($this->serviceName) !== 'createlicense'){
+
             $this->validateLicenseToken();
         }
         
@@ -113,10 +117,15 @@ class RestController
             $this->throwError(400, "License Key Not Found or invalid token");
 
         $this->licenseId =  (int) $license_results['id'];
+
         $this->status = $license_results['status'];
+
         $this->expiry = $license_results['expires_at'];
+
         $this->max_installations = $license_results['max_installations'];
+
         $this->active_installations = $license_results['active_installations'];
+
         // $this->returnResponse(200, "License Key validated successfully.",$license_results);
     }
     /**
@@ -180,6 +189,7 @@ class RestController
             $response_array['response']['data'] = $responsedata;
         }
         echo json_encode($response_array, JSON_PRETTY_PRINT);
+        
         exit;
     }
 
