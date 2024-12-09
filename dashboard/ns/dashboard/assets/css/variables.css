@@ -1,0 +1,46 @@
+/*Variables */
+:root{
+--primarycolor: #fefefe;
+--secondarycolor: #3498db;
+--tertiarycolor:  #2c3e50;
+--primaryoff:  #dcdde1;
+--colorwhite: #fff;
+--colorblack: #000;
+--colorgreen: #49D248;
+--colorgreenoff: #EBFFE5;
+--coloryellow: #FFF04B;
+--coloryellowoff: #FFF9E5;
+--colordarkgray: #636363;
+--colormidgray: #D5D5D5;
+--colorlightgray: #E7E7E7;
+--colororange: #FAA723;
+--colororangeoff: #FFF9E5;
+--colorblue: #4F76F4;
+--colorred: #eb062c;
+--colorpink: #F85A78;
+--colorredoff: #FFE5E5;
+--colorvoilet: #8F59FF;
+--colorpurple: #965AF8;
+--bordercolor: #F5F7F9;
+--bordercard: #E8ECF1;
+--circleorange: #FFB56C;
+--circleblue: #6C96FF;
+--circlegreen: #6CFF84;
+--circlegray: #E3DFDD;
+--circlecyan: #66DCE0;
+--circleflugreen: #9EF266;
+--colorblueprimary: #37BCC7;
+--colorblueprimaryoff: #E5FDFF;
+--colorbronze: #DB7E54;
+--colorbronzeoff: #FFEDE5;
+--sectionpadding: 60px;
+--h2font: 30px;
+--h3font: 24px;
+--h4font: 22px;
+--lgfont: 18px;
+--normalfont: 16px;
+--smallfont: 14px;
+--xsmallfont: 12px;
+--xxsmallfont: 10px;
+--dzn-offcanvas-width : 540px
+}
