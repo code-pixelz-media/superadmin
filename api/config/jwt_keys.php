@@ -1,0 +1,5 @@
+<?php
+return [
+    'access_key' => 'a0936289bf95ca2eb45e8a7c29f903c256aa080484c657c22f16694793867865',
+    'refresh_key' => 'ae227ff45cfb4ca0a23990c30c03e8971ad315898fd17b505653672f0ba7d1f5'
+];

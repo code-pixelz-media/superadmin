@@ -1,0 +1,12 @@
+# Ignore node_modules folder
+node_modules/
+
+#ignore config file
+/api/config/config.php
+
+.DS_Store
+
+/api/.htaccess
+/api/config
+/api/config
+.DS_Store
